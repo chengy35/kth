@@ -12,7 +12,7 @@ function  combine_w_25File(fullvideoname,featDir_FV,descriptor_path)
     if exist(cwallFile,'file')
         classLabelAndwall =  dlmread(cwallFile);
     end
-    if size(classLabelAndwall,1) ~= 24*
+    if size(classLabelAndwall,1) ~= 24*202753
               for i = 3:length(category) % 1-6 actions'
                         for j = 1:25
                             for k = 1:4 % for clips

@@ -8,7 +8,7 @@ function trainAndTest_normalizedL2_LLC(featDir_FV,featDir_LLC)
     result = zeros(nClasses,nClasses);
     classAndwordTerm = {};
     for j = 1:25
-    	featFile{j} = [fullfile(featDir_LLC,sprintf('/cmbh/%d.mat',j))];
+    	featFile{j} = [fullfile(featDir_LLC,siprintf('/call/%d.mat',j))];
     	fprintf('load %s\n',featFile{j});
 	classAndwordTerm{j} = load(featFile{j});
     end

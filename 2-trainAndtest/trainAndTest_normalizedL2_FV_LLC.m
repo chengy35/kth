@@ -8,10 +8,10 @@ function trainAndTest_normalizedL2_FV_LLC(featDir_FV,featDir_LLC,featType)
     result = zeros(nClasses,nClasses);
     classAndwordTerm = {};
     for j = 1:25
-    	featFile{j} = [fullfile(featDir_FV,sprintf('/cw%s/%d.mat',featType,j))];
+    	featFile{j} = [fullfile(featDir_FV,sprintf('/cwall%s/%d.mat',featType,j))];
     	fprintf('load %s\n',featFile{j});
 	classandword1 = dlmread(featFile{j});
-	featFile{j} = [fullfile(featDir_LLC,sprintf('/c/%d.mat',featType,j))];
+	featFile{j} = [fullfile(featDir_LLC,sprintf('/call/%d.mat',featType,j))];
 	classandword2 = load(featFile{j});
 	classandword1(:,2:end) = normalizeL2(classandword1(:,2:end));
 	classandword2.classAndwordTerm(:,2:end) = normalizeL2(classandword2.classAndwordTerm(:,2:end));

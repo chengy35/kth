@@ -6,8 +6,6 @@ vl_setup();
 setenv('LD_LIBRARY_PATH','/usr/local/lib/'); 
 addpath('~/lib/liblinear/matlab');
 addpath('~/lib/libsvm/matlab');
-addpath('~/lib/chol_incomplete/');
-addpath('/usr/local/MATLAB/extern/lib/essential/');
 
 [video_data_dir,video_dir,fullvideoname, videoname,vocabDir,featDir_FV,featDir_LLC,descriptor_path,actionName,class_category] = getconfig();
 st = 1;

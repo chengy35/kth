@@ -1,0 +1,3 @@
+结果发现normalized2效果并没有怎么好，可能对kth和llc，fv编码效果不怎么好，但是对其他的就不知道了
+
+rank pooling可以试一下效果

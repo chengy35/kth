@@ -1,0 +1,77 @@
+clear;
+clc;
+% TODO Add paths
+addpath('~/lib/vlfeat/toolbox');
+vl_setup();
+setenv('LD_LIBRARY_PATH','/usr/local/lib/'); 
+addpath('~/lib/liblinear/matlab');
+addpath('~/lib/libsvm/matlab');
+
+encode = 'fv';
+if strcmp(encode, 'fv')
+	fprintf('begin fv encoding\n');
+	[fullvideoname, videoname,vocabDir,featDir,actionName,descriptor_path,class_category] = getconfigfv();
+	st = 1;
+	send = length(videoname);
+	fprintf('Start : %d \n',st);
+	fprintf('End : %d \n',send);
+	addpath('0-trajectory');
+	fprintf('select salient trajectory\n');
+	getIDT(st,send,fullvideoname,descriptor_path);
+	%getSalient(st,send,fullvideoname,descriptor_path);
+	addpath('1-fv');
+	%fprintf('getGMM \n');
+	% create GMM model, Look at this function see if parameters are okay for you.
+	[gmm] = getGMMAndBOW(fullvideoname,vocabDir,descriptor_path);
+	% generate Fisher Vectors
+	fprintf('generate Fisher Vectors \n');
+	FVEncodeFeatures(fullvideoname,gmm,featDir,descriptor_path,class_category);
+	clear gmm;
+elseif strcmp(encode, 'llc')
+	fprintf('begin llc encoding\n');
+	[fullvideoname, videoname,vocabDir,featDir,actionName,descriptor_path,class_category] = getconfigllc();
+	st = 1;
+	send = length(videoname);
+	fprintf('Start : %d \n',st);
+	fprintf('End : %d \n',send);
+	addpath('0-trajectory');
+	fprintf('select salient trajectory\n');
+	getSalient(st,send,fullvideoname,descriptor_path)
+	addpath('1-cluster');
+	totalnumber = 256000;
+	kmeans_size = 4000;
+	fprintf('clustering \n');
+	%centers = SelectSalient(kmeans_size,totalnumber,fullvideoname,descriptor_path,vocabDir);
+	%fprintf('llc Encoding now \n');
+	%llcEncodeFeatures(centers,fullvideoname,descriptor_path,featDir,class_category);
+	%clear centers;
+elseif strcmp(encode, 'graph')
+	fprintf('get configure...\n');
+	[graphfeatDir,fullvideoname, videoname,featDir,descriptor_path,class_category] = getconfiggraph();
+	st = 1;
+	send = length(videoname);
+	fprintf('Start : %d \n',st);
+	fprintf('End : %d \n',send);
+	addpath('0-trajectory');
+	fprintf('select salient trajectory\n');
+	getSalient(st,send,fullvideoname,descriptor_path);
+	addpath('1-graph');
+	fprintf('begin spectral cluster\n');
+	config = struct;
+	config.m = 10;
+	
+	config.kmeasparams = 5;
+	graph(graphfeatDir,config,fullvideoname,descriptor_path); %for every video, cluster it to 30 clusters, then, find the final feature representation of it.
+	
+	fprintf('getGMM \n');
+	%create GMM model, Look at this function see if parameters are okay for you.
+	%[gmm] = getGMMAndBOW(graphfeatDir,fullvideoname,vocabDir,descriptor_path);
+	% generate Fisher Vectors
+	%fprintf('generate Fisher Vectors \n');
+	%FVEncodeFeatures(fullvideoname,gmm,featDir,descriptor_path,class_category);
+	%clear gmm;
+end
+
+addpath('2-trainAndtest');
+%trainAndTest(fullvideoname,featDir,encode);
+trainAndTest_normalizedL2(fullvideoname,featDir);

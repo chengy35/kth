@@ -1,0 +1,91 @@
+
+function getBOWHistograms(fullvideoname,gmm,vocab,st,send,featDir,descriptor_path)    
+    pcaFactor = 0.5;    
+    dict_size = size(vocab.trj,2);
+    if ~exist(fullfile(featDir,'mbh'),'dir')
+    mkdir(fullfile(featDir,'trj'));
+    mkdir(fullfile(featDir,'hog'));
+    mkdir(fullfile(featDir,'hof'));
+    mkdir(fullfile(featDir,'mbh'));
+    end
+    for i = st : min(size(fullvideoname,1),send)   
+        [~,partfile,~] = fileparts(fullvideoname{i});
+        file = fullfile(featDir,'mbh',sprintf('%s-fv.mat',partfile));         
+        descriptorFile = fullfile(descriptor_path,sprintf('%s.mat',partfile));
+        if exist(file,'file')
+			fprintf('%d --> %s Exists \n',i,file);            
+            continue;
+        end
+		timest = tic();
+		fprintf('Processing Video file %s\n',partfile);
+        
+		
+        if exist(descriptorFile,'file')
+            load(descriptorFile);
+        else
+			try 
+				[obj,trj,hog,hof,mbhx,mbhy] = extract_improvedfeatures(fullvideoname{i}) ;
+			catch e
+				e
+				continue;
+			end
+            %save(descriptorFile,'hog','hof','mbhx','mbhy','trj','obj','-v7.3');
+        end
+        hog = sqrt(hog); hof = sqrt(hof); mbhx = sqrt(mbhx);mbhy = sqrt(mbhy);
+		mbh = [mbhx mbhy];
+        frames = unique(obj(:,1));
+        
+        %hist_trj = zeros( numel(frames),dict_size);
+        %hist_hog = zeros( numel(frames),dict_size);
+        %hist_hof = zeros( numel(frames),dict_size);
+        %hist_mbh = zeros( numel(frames),dict_size);
+        
+        fv_trj = zeros( numel(frames),pcaFactor*size(gmm.pcamap.trj,1)*2*size(gmm.means.trj,2));
+        fv_hog = zeros( numel(frames),pcaFactor*size(gmm.pcamap.hog,1)*2*size(gmm.means.hog,2));
+        fv_hof = zeros( numel(frames),pcaFactor*size(gmm.pcamap.hof,1)*2*size(gmm.means.hof,2));
+        fv_mbh = zeros( numel(frames),pcaFactor*size(gmm.pcamap.mbh,1)*2*size(gmm.means.mbh,2));
+        
+        %sp_trj = zeros( numel(frames),dict_size*5);
+        %sp_hog = zeros( numel(frames),dict_size*5);
+        %sp_hof = zeros( numel(frames),dict_size*5);
+        %sp_mbh = zeros( numel(frames),dict_size*5);
+        
+        
+        for frm = 1 : numel(frames)
+            frm_indx = find(obj(:,1)==frames(frm));            
+            
+            %sp_trj(frm,:) = getSPM(obj,frm_indx,trj,vocab.trj);
+            %sp_hog(frm,:) = getSPM(obj,frm_indx,hog,vocab.hog);
+            %sp_hof(frm,:) = getSPM(obj,frm_indx,hof,vocab.hof);
+            %sp_mbh(frm,:) = getSPM(obj,frm_indx,mbh,vocab.mbh);
+            
+            %hist_trj(frm,:)= getHistogram(trj,vocab.trj,frm_indx,dict_size);
+            %hist_hof(frm,:)= getHistogram(hog,vocab.hog,frm_indx,dict_size);
+            %hist_hog(frm,:)= getHistogram(hof,vocab.hof,frm_indx,dict_size);
+            %hist_mbh(frm,:)= getHistogram(mbh,vocab.mbh,frm_indx,dict_size);            
+            
+            fv_trj(frm,:) = getFv(trj,gmm.means.trj, gmm.covariances.trj, gmm.priors.trj,gmm.pcamap.trj,pcaFactor,frm_indx)   ;
+            fv_hog(frm,:) = getFv(hog,gmm.means.hog, gmm.covariances.hog, gmm.priors.hog,gmm.pcamap.hog,pcaFactor,frm_indx)   ;
+            fv_hof(frm,:) = getFv(hof,gmm.means.hof, gmm.covariances.hof, gmm.priors.hof,gmm.pcamap.hof,pcaFactor,frm_indx)   ;
+            fv_mbh(frm,:) = getFv(mbh,gmm.means.mbh, gmm.covariances.mbh, gmm.priors.mbh,gmm.pcamap.mbh,pcaFactor,frm_indx)   ;     
+            
+        end
+        %save_mat_file('trj',hist_trj,partfile,featDir)    ;
+        %save_mat_file('hog',hist_hog,partfile,featDir)    ;
+        %save_mat_file('hof',hist_hof,partfile,featDir)    ;
+        %save_mat_file('mbh',hist_mbh,partfile,featDir)    ;       
+        
+        %save_mat_file_sp('trj',sp_trj,partfile,featDir)    ;
+        %save_mat_file_sp('hog',sp_hog,partfile,featDir)    ;
+        %save_mat_file_sp('hof',sp_hof,partfile,featDir)    ;
+        %save_mat_file_sp('mbh',sp_mbh,partfile,featDir)    ;
+        
+        save_mat_file_fv('trj',fv_trj,partfile,featDir)    ;
+        save_mat_file_fv('hog',fv_hog,partfile,featDir)    ;
+        save_mat_file_fv('hof',fv_hof,partfile,featDir)    ;
+        save_mat_file_fv('mbh',fv_mbh,partfile,featDir)    ;
+        timest = toc(timest);
+		fprintf('%d--> %s done --> time  %1.1f sec \n',i,file,timest);
+    end
+end
+

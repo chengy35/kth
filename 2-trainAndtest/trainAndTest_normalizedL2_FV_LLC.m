@@ -91,6 +91,3 @@ function trainAndTest_normalizedL2_FV_LLC(featDir_FV,featDir_LLC,gmmSize,AllFeat
 	fprintf('average_accuracy is %f, and accuracy is %f, and nTotal is %d',average_accuracy,accuracy,nTotal);
 end
 
-function x = normalizeL2(x)
-    x=x./repmat(sqrt(sum(x.*conj(x),2)),1,size(x,2));
-end

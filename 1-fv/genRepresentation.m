@@ -15,8 +15,8 @@ function W = genRepresentation(data,CVAL)
 end
 
 function Data = getNonLinearity(Data)
-    %Data = sign(Data).*sqrt(abs(Data));
-       Data = vl_homkermap(Data',2,'kchi2');
+    Data = sign(Data).*sqrt(abs(Data));
+    % Data = vl_homkermap(Data',2,'kchi2');
     %Data =  sqrt(abs(Data));                       
     %Data =  sqrt(Data);       
 end

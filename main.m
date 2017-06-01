@@ -45,5 +45,5 @@ clear centers;
 
 addpath('2-trainAndtest');
 %	trainAndTest_normalizedL2_LLC(featDir_FV,featDir_LLC);
-trainAndTest_normalizedL2_FV(featDir_FV,featDir_LLC);
-%trainAndTest_normalizedL2_FV_LLC(featDir_FV,featDir_LLC,'all');
+        trainAndTest_normalizedL2_FV(featDir_FV,featDir_LLC);
+%trainAndTest_normalizedL2_FV_LLC(featDir_FV,featDir_LLC,gmmSize,AllFeatureDimension);

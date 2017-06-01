@@ -1,16 +1,18 @@
-function trainAndTest_normalizedL2_FV_LLC(featDir_FV,featDir_LLC,featType)
+function trainAndTest_normalizedL2_FV_LLC(featDir_FV,featDir_LLC,gmmSize,AllFeatureDimension)
     video_dir = '~/remote/KTH/';
     category = dir(video_dir);
     nClasses = 6;
     nCorrect = 0;
     nTotal = 0; 
-    resultFile = sprintf('./result-normalized2-%s',featType);
+    resultFile = './result-normalized2';
     result = zeros(nClasses,nClasses);
     classAndwordTerm = {};
+    fvdimension = gmmSize*AllFeatureDimension*2+1;
     for j = 1:25
     	featFile{j} = [fullfile(featDir_FV,sprintf('/cwall/%d.mat',j))];
     	fprintf('load %s\n',featFile{j});
 	classandword1 = dlmread(featFile{j});
+	classandword1 = reshape(classandword1,fvdimension,size(classandword1,1)/fvdimension)'; %' 
 	featFile{j} = [fullfile(featDir_LLC,sprintf('/call/%d.mat',j))];
 	classandword2 = load(featFile{j});
 	classandword1(:,2:end) = normalizeL2(classandword1(:,2:end));

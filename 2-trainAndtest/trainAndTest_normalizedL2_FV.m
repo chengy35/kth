@@ -1,4 +1,4 @@
-function trainAndTest_normalizedL2_FV(featDir_FV,featDir_LLC)
+function trainAndTest_normalizedL2_FV(featDir_FV,featDir_LLC,gmmSize,AllFeatureDimension)
     video_dir = '~/remote/KTH/';
     category = dir(video_dir);
     nClasses = 6;
@@ -7,6 +7,7 @@ function trainAndTest_normalizedL2_FV(featDir_FV,featDir_LLC)
     resultFile = './result-normalized2';
     result = zeros(nClasses,nClasses);
     classAndwordTerm = {};
+    fvdimension = gmmSize*AllFeatureDimension*2+1;
     for j = 1:25
     	featFile{j} = [fullfile(featDir_FV,sprintf('/cwall/%d.mat',j))];
     	fprintf('load %s\n',featFile{j});

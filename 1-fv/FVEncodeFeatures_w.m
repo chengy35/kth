@@ -2,6 +2,10 @@ function FVEncodeFeatures_w(fullvideoname,gmm,vocab,st,send,featDir,descriptor_p
     video_dir = '~/remote/KTH/';
     category = dir(video_dir);
     pcaFactor = 0.5;
+    
+    if ~exist(fullfile(featDir),'dir')
+        mkdir(fullfile(featDir));
+    end
     if ~exist(fullfile(featDir,'all'),'dir')
         mkdir(fullfile(featDir,'all'));
     end
@@ -48,4 +52,3 @@ function h = getFisherVector(all, means, covariances, priors,pcamap,pcaFactor,fr
     comps = pcamap(:,1:size(pcamap,1)*pcaFactor);
     h = vl_fisher((all(frm_indx,:)*comps)', means, covariances, priors);
 end
-

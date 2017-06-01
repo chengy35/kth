@@ -14,8 +14,8 @@ function trainAndTest_normalizedL2_FV_LLC(featDir_FV,featDir_LLC,featType)
 	featFile{j} = [fullfile(featDir_LLC,sprintf('/call/%d.mat',j))];
 	classandword2 = load(featFile{j});
 	classandword1(:,2:end) = normalizeL2(classandword1(:,2:end));
-	classandword2.classAndwordTerm(:,2:end) = normalizeL2(classandword2.classAndwordTerm(:,2:end));
-	classAndwordTerm{j} = [classandword2.classAndwordTerm,classandword1(:,2:end)];
+	classandword2.classAndwordTermall(:,2:end) = normalizeL2(classandword2.classAndwordTermall(:,2:end));
+	classAndwordTerm{j} = [classandword2.classAndwordTermall,classandword1(:,2:end)];
     end
     for j = 1:25
 	timest = tic();

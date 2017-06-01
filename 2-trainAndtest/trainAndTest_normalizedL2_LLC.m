@@ -8,7 +8,7 @@ function trainAndTest_normalizedL2_LLC(featDir_FV,featDir_LLC)
     result = zeros(nClasses,nClasses);
     classAndwordTerm = {};
     for j = 1:25
-    	featFile{j} = [fullfile(featDir_LLC,siprintf('/call/%d.mat',j))];
+    	featFile{j} = [fullfile(featDir_LLC,sprintf('/call/%d.mat',j))];
     	fprintf('load %s\n',featFile{j});
 	classAndwordTerm{j} = load(featFile{j});
     end
@@ -19,10 +19,10 @@ function trainAndTest_normalizedL2_LLC(featDir_FV,featDir_LLC)
 	trainclassAndwordTerm = [];
 	for k = 1:25
 		if j ~= k,
-			trainclassAndwordTerm = [trainclassAndwordTerm; classAndwordTerm{k}.classAndwordTerm];
+			trainclassAndwordTerm = [trainclassAndwordTerm; classAndwordTerm{k}.classAndwordTermall];
 		end
 	end
-	testclassAndwordTerm = classAndwordTerm{j}.classAndwordTerm;
+	testclassAndwordTerm = classAndwordTerm{j}.classAndwordTermall;
 	
 	trainSize = size(trainclassAndwordTerm,1);
 	testSize = size(testclassAndwordTerm,1);

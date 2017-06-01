@@ -1,8 +1,0 @@
-{Error using dlmread (line 61)
-The file '~/remote/KTHData/fv/feats/cwallall/1.mat' could not be opened
-because: No such file or directory
-
-Error in trainAndTest_normalizedL2_FV_LLC (line 13)
-	classandword1 = dlmread(featFile{j});
-} 
-

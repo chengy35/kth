@@ -10,7 +10,10 @@ function trainAndTest_normalizedL2_FV(featDir_FV,featDir_LLC)
     for j = 1:25
     	featFile{j} = [fullfile(featDir_FV,sprintf('/cwall/%d.mat',j))];
     	fprintf('load %s\n',featFile{j});
-	classAndwordTerm{j} = dlmread(featFile{j});
+    	classandword1 = dlmread(featFile{j});
+	classandword1 = reshape(classandword1,fvdimension,size(classandword1,1)/fvdimension)'; %'
+	classandword1(:,2:end) = normalizeL2(classandword1(:,2:end));
+	classAndwordTerm{j} = [classandword1];
     end
     for j = 1:25
 	timest = tic();
@@ -31,12 +34,9 @@ function trainAndTest_normalizedL2_FV(featDir_FV,featDir_LLC)
 	nTrain = 1:trainSize;
 	nTest = trainSize+1:trainSize+testSize;
 
-
 	trainData = trainclassAndwordTerm(:,2:size(trainclassAndwordTerm,2));
-	trainData = normalizeL2(trainData);
-	
 	testData = testclassAndwordTerm(:,2:size(testclassAndwordTerm,2));
-	testData = normalizeL2(testData);
+	
 	testData_Kern_cell = [testData * trainData']; 
 
 	trainData_Kern_cell = [trainData * trainData']; 

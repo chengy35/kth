@@ -21,7 +21,7 @@ function  getVideoDarwin(fullvideoname,featDir,descriptor_path,gmmSize,AllFeatur
                             if exist(wallFile,'file') == 0
                                 timest = tic();
                                 data = dlmread(allfeatFile);
-                                data = reshape(data,dimension, size(data,1)/dimension);
+                                data = reshape(data,dimension, size(data,1)/dimension)';
                                 w = genRepresentation(data,1);
                                 class_label = i-2;
                                 classLabelAndw = [class_label;w];
